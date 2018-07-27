@@ -101,3 +101,7 @@ variable "private_subnets" {
 variable "execution_role_arn" {
   description = "Execution role assigned to the ECS task"
 }
+
+variable "cloudwatch_alerts_arn" {
+  description = "SNS topic to send cloudwatch alerts to"
+}
