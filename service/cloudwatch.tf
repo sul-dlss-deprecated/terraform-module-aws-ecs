@@ -19,3 +19,47 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_high_alert" {
   alarm_actions = ["${var.cloudwatch_alerts_arn}"]
   ok_actions    = ["${var.cloudwatch_alerts_arn}"]
 }
+
+# Get the data for the given HTTP and HTTPS listeners.
+data "aws_lb" "service" {
+  name = "${var.environment}-${var.cluster_name}-alb"
+}
+
+resource "aws_cloudwatch_metric_alarm" "elb_response" {
+  alarm_name          = "${var.service_name}-${var.environment}-elb-response-slow"
+  comparison_operator = "LessThanOrEqualToThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "TargetResponseTime"
+  namespace           = "AWS/ApplicationELB"
+  period              = "60"
+  statistic           = "Maximum"
+  threshold           = "60"
+  treat_missing_data  = "notBreaching"
+
+  dimensions {
+    LoadBalancer = "${data.aws_lb.service.arn_suffix}"
+    TargetGroup  = "${aws_alb_target_group.service.arn_suffix}"
+  }
+
+  alarm_actions = ["${var.cloudwatch_alerts_arn}"]
+  ok_actions    = ["${var.cloudwatch_alerts_arn}"]
+}
+
+resource "aws_cloudwatch_metric_alarm" "elb_health_hosts" {
+  alarm_name          = "${var.service_name}-${var.environment}-elb-health-hosts"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "HealthyHostCount"
+  namespace           = "AWS/ApplicationELB"
+  period              = "60"
+  statistic           = "Maximum"
+  threshold           = "1"
+
+  dimensions {
+    LoadBalancer = "${data.aws_lb.service.arn_suffix}"
+    TargetGroup  = "${aws_alb_target_group.service.arn_suffix}"
+  }
+
+  alarm_actions = ["${var.cloudwatch_alerts_arn}"]
+  ok_actions    = ["${var.cloudwatch_alerts_arn}"]
+}
