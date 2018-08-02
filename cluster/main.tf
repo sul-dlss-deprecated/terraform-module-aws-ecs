@@ -21,19 +21,19 @@ resource "aws_cloudwatch_log_group" "cluster" {
 ALB for cluster
 ======*/
 resource "aws_alb" "cluster_alb" {
-  name            = "${var.environment}-${var.cluster_name}-alb"
+  name            = "${var.cluster_name}-alb"
   subnets         = ["${split(",", var.public_subnets)}"]
   security_groups = ["${aws_security_group.cluster_alb_sg.id}"]
 
   tags {
-    Name        = "${var.environment}-${var.cluster_name}-alb"
+    Name        = "${var.cluster_name}-alb"
     Environment = "${var.environment}"
   }
 }
 
 /* security group for ALB */
 resource "aws_security_group" "cluster_alb_sg" {
-  name        = "${var.environment}-${var.cluster_name}-alb-sg"
+  name        = "${var.cluster_name}-alb-sg"
   description = "Allow HTTP/HTTPS from Anywhere into ALB"
   vpc_id      = "${var.vpc_id}"
 
@@ -59,7 +59,7 @@ resource "aws_security_group" "cluster_alb_sg" {
   }
 
   tags {
-    Name = "${var.environment}-${var.cluster_name}-alb-sg"
+    Name = "${var.cluster_name}-alb-sg"
   }
 }
 
@@ -69,7 +69,7 @@ resource "random_id" "target_group" {
 
 /* default target group and listeners */
 resource "aws_alb_target_group" "cluster_alb_default_tg" {
-  name                  = "${var.environment}-${var.cluster_name}-alb-${random_id.target_group.hex}"
+  name                  = "${var.cluster_name}-alb-${random_id.target_group.hex}"
   port                  = 80
   protocol              = "HTTP"
   vpc_id                = "${var.vpc_id}"
