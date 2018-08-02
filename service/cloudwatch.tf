@@ -22,7 +22,7 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_high_alert" {
 
 # Get the data for the given HTTP and HTTPS listeners.
 data "aws_lb" "service" {
-  name = "${var.environment}-${var.cluster_name}-alb"
+  name = "${var.cluster_name}-alb"
 }
 
 resource "aws_cloudwatch_metric_alarm" "elb_response" {
