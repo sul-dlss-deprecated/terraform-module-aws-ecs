@@ -17,7 +17,7 @@ resource "aws_route53_record" "service" {
 IAM task role
 ======*/
 resource "aws_iam_role" "ecs_task_role" {
-  name = "${var.service_name}-${var.environment}-ecs-task-role"
+  name = "${var.service_name}-ecs-task-role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -61,7 +61,7 @@ resource "random_id" "target_group" {
 }
 
 resource "aws_alb_target_group" "service" {
-  name        = "${var.service_name}-${var.environment}-alb-tg-${random_id.target_group.hex}"
+  name        = "${var.service_name}-alb-tg-${random_id.target_group.hex}"
   port        = "${var.port}"
   protocol    = "HTTPS"
   vpc_id      = "${var.vpc_id}"
@@ -137,7 +137,7 @@ Security Group
 ======*/
 resource "aws_security_group" "ecs_service" {
   vpc_id      = "${var.vpc_id}"
-  name        = "${var.service_name}-${var.environment}-ecs-service-sg"
+  name        = "${var.service_name}-ecs-service-sg"
   description = "Allow egress from container"
 
   egress {
@@ -155,7 +155,7 @@ resource "aws_security_group" "ecs_service" {
   }
 
   tags {
-    Name        = "${var.service_name}-${var.environment}-ecs-service-sg"
+    Name        = "${var.service_name}-ecs-service-sg"
     Environment = "${var.environment}"
   }
 }
