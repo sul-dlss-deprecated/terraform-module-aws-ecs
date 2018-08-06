@@ -3,11 +3,11 @@
 #######################################################################
 
 variable "service_name" {
-  description = "Name of the service used in resources along with environment"
+  description = "Name of the service used in resource names along with environment (should only be alphanumeric characters or hyphens)"
 }
 
 variable "environment" {
-  description = "Environment name used in resources along with service_name"
+  description = "Environment name used in resource names along with service_name"
 }
 
 variable "service_host" {
