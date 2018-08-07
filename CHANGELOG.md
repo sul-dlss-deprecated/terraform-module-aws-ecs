@@ -1,4 +1,8 @@
-# v5
+# v7
+
+* Fix service/ not actually using the protocol variable.
+
+# v6
 
 * Change how cluster ALB security group is set.  It now uses a series of
   aws_security_group_rule statements rather than placing everything in the

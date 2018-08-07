@@ -63,7 +63,7 @@ resource "random_id" "target_group" {
 resource "aws_alb_target_group" "service" {
   name        = "${var.service_name}-alb-tg-${random_id.target_group.hex}"
   port        = "${var.port}"
-  protocol    = "HTTPS"
+  protocol    = "${var.protocol}"
   vpc_id      = "${var.vpc_id}"
   target_type = "ip"
 
