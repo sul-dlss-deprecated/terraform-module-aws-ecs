@@ -10,6 +10,11 @@ variable "vpc_id" {
   description = "VPC ID to place the resources within"
 }
 
+variable "open_ports" {
+  description = "Ports we open access to in the default security group"
+  default     = ["80", "443"]
+}
+
 variable "public_subnets" {
   description = "Subnets to use in creating the application load balancer"
 }

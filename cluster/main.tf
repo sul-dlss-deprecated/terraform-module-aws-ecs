@@ -37,30 +37,31 @@ resource "aws_security_group" "cluster_alb_sg" {
   description = "Allow HTTP/HTTPS from Anywhere into ALB"
   vpc_id      = "${var.vpc_id}"
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   tags {
     Name = "${var.cluster_name}-alb-sg"
   }
+}
+
+resource "aws_security_group_rule" "ingress" {
+  count       = "${length(var.open_ports)}"
+
+  type        = "ingress"
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+  from_port   = "${element(var.open_ports, count.index)}"
+  to_port     = "${element(var.open_ports, count.index)}"
+
+  security_group_id = "${aws_security_group.cluster_alb_sg.id}"
+}
+
+resource "aws_security_group_rule" "egress" {
+  type        = "egress"
+  protocol    = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+  from_port   = 0
+  to_port     = 0
+
+  security_group_id = "${aws_security_group.cluster_alb_sg.id}"
 }
 
 resource "random_id" "target_group" {
