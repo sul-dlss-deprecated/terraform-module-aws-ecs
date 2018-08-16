@@ -22,3 +22,8 @@ variable "public_subnets" {
 variable "hosted_zone_name" {
   description = "Route53 hosted zone name to use for creating an ALB cert"
 }
+
+variable "alb_cidr" {
+  type = "list"
+  default = ["0.0.0.0/0"]
+}
