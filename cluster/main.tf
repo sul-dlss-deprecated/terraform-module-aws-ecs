@@ -47,7 +47,7 @@ resource "aws_security_group_rule" "ingress" {
 
   type        = "ingress"
   protocol    = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
+  cidr_blocks = "${var.alb_cidr}"
   from_port   = "${element(var.open_ports, count.index)}"
   to_port     = "${element(var.open_ports, count.index)}"
 
