@@ -1,3 +1,12 @@
+# v9
+
+* Add a data version of the main ecs module, to allow sub-modules to include
+  values for the main ecs setup.
+
+# v8
+
+* Make alb cidr block a variable.
+
 # v7
 
 * Fix service/ not actually using the protocol variable.
