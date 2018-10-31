@@ -3,7 +3,7 @@ Route53 record
 ======*/
 resource "aws_route53_record" "service" {
   zone_id = "${var.cluster_zone_id}"
-  name    = "${var.service_host}.${var.cluster_zone_name}"
+  name    = "${var.service_host}"
   type    = "A"
 
   alias {

@@ -23,6 +23,11 @@ variable "hosted_zone_name" {
   description = "Route53 hosted zone name to use for creating an ALB cert"
 }
 
+variable "certificate_name" {
+  description = "Hostname for the certificate to use for validation"
+  default     = "${var.cluster_name}-lb.${var.hosted_zone_name}"
+}
+
 variable "alb_cidr" {
   type = "list"
   default = ["0.0.0.0/0"]

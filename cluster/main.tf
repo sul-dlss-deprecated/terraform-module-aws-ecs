@@ -112,7 +112,7 @@ data "aws_route53_zone" "selected" {
 }
 
 resource "aws_acm_certificate" "cert" {
-  domain_name       = "${var.cluster_name}-lb.${var.hosted_zone_name}"
+  domain_name       = "${var.certificate_name}"
   validation_method = "DNS"
 }
 
