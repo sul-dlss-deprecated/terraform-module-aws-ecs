@@ -11,8 +11,12 @@ variable "environment" {
 }
 
 variable "service_host" {
+  description = "Shorthost for the ALB hostname (ie: 'consul' for consul.sul.stanford.edu)"
+}
+
+variable "service_fullhost" {
   description = "Hostname for the ALB (ie: 'consul.stanford.edu')"
-  default     = "${var.service_name}.${var.cluster_zone_name}"
+  default = ""
 }
 
 #######################################################################

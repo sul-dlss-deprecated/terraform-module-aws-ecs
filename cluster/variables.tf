@@ -25,7 +25,7 @@ variable "hosted_zone_name" {
 
 variable "certificate_name" {
   description = "Hostname for the certificate to use for validation"
-  default     = "${var.cluster_name}-lb.${var.hosted_zone_name}"
+  default = ""
 }
 
 variable "alb_cidr" {
