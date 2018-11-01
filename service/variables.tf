@@ -11,8 +11,7 @@ variable "environment" {
 }
 
 variable "service_host" {
-  description = "Hostname for the ALB (ie: 'consul.stanford.edu')"
-  default     = "${var.service_name}.${var.cluster_zone_name}"
+  description = "Hostname for the ALB, default should be $service_name.$cluster_zone_name (ie: 'consul.stanford.edu')"
 }
 
 #######################################################################
