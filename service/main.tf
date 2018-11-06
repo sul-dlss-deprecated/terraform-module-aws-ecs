@@ -1,9 +1,15 @@
 /*====
 Route53 record
 ======*/
+
+locals {
+  default_service_host = "${var.service_name}.${var.cluster_zone_name}"
+  service_host         = "${var.service_fullhost != "" ? var.service_fullhost : local.default_service_host}"
+}
+
 resource "aws_route53_record" "service" {
   zone_id = "${var.cluster_zone_id}"
-  name    = "${var.service_host}.${var.cluster_zone_name}"
+  name    = "${local.service_host}"
   type    = "A"
 
   alias {

@@ -105,6 +105,10 @@ resource "aws_alb_listener" "cluster_alb_https_listener" {
   }
 }
 
+locals {
+  default_certificate_name = "${var.cluster_name}-lb.${var.hosted_zone_name}"
+  certificate_name         = "${var.certificate_name != "" ? var.certificate_name : local.default_certificate_name}"
+}
 /* cert for https listener */
 data "aws_route53_zone" "selected" {
   name         = "${var.hosted_zone_name}."
@@ -112,7 +116,7 @@ data "aws_route53_zone" "selected" {
 }
 
 resource "aws_acm_certificate" "cert" {
-  domain_name       = "${var.cluster_name}-lb.${var.hosted_zone_name}"
+  domain_name       = "${local.certificate_name}"
   validation_method = "DNS"
 }
 
