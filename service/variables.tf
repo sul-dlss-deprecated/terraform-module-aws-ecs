@@ -110,3 +110,8 @@ variable "execution_role_arn" {
 variable "cloudwatch_alerts_arn" {
   description = "SNS topic to send cloudwatch alerts to"
 }
+
+variable "service_type" {
+    default = "FARGATE"
+    description = "TYPE and COMPATIBILITY for container service, default [FARGATE]."
+}
