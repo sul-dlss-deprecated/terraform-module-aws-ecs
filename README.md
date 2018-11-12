@@ -5,9 +5,9 @@ necessary to update and run services and tasks.
 
 # Variables
 
-See variables.tf for all current variables and descriptions.
+See `variables.tf` for all current variables and descriptions.
 
-###resources
+### Resources
 - aws_iam_role (execution role)
 - aws_iam_user (${environment}-ecs-deployer)
   - aws_iam_access_key
@@ -25,4 +25,4 @@ See variables.tf for all current variables and descriptions.
 
 # Outputs
 
-See output.tf for all current outputs.
+See `output.tf` for all current outputs.
