@@ -47,7 +47,7 @@ ECS task definitions
 resource "aws_ecs_task_definition" "service" {
   family                   = "${var.service_name}"
   container_definitions    = "${var.container_definition}"
-  requires_compatibilities = ["FARGATE"]
+  requires_compatibilities = ["${var.service_type}"]
   network_mode             = "awsvpc"
   task_role_arn            = "${aws_iam_role.ecs_task_role.arn}"
   execution_role_arn       = "${var.execution_role_arn}"
@@ -170,7 +170,7 @@ resource "aws_ecs_service" "service" {
   name            = "${var.service_name}"
   task_definition = "${aws_ecs_task_definition.service.arn}"
   desired_count   = "${var.min_capacity}"
-  launch_type     = "FARGATE"
+  launch_type     = "${var.service_type}"
   cluster         = "${var.cluster_id}"
 
   network_configuration {
