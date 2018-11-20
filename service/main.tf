@@ -86,8 +86,13 @@ resource "aws_alb_listener_rule" "service_http" {
   listener_arn = "${var.cluster_alb_http_listener_arn}"
 
   action {
-    type             = "forward"
-    target_group_arn = "${aws_alb_target_group.service.arn}"
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 
   condition {
