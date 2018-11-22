@@ -12,7 +12,7 @@ useful in other places, and we want to keep using that pattern.
 
 See variables.tf for all current variables and descriptions.
 
-###resources
+### Resources
 - data aws_iam_role (execution role)
 
 # Outputs
