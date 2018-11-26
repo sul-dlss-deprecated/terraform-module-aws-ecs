@@ -24,6 +24,7 @@ IAM task role
 ======*/
 resource "aws_iam_role" "ecs_task_role" {
   name = "${var.service_name}-ecs-task-role"
+
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -74,7 +75,8 @@ resource "aws_alb_target_group" "service" {
   target_type = "ip"
 
   health_check {
-    path = "${var.health_check_url}"
+    path     = "${var.health_check_url}"
+    protocol = "${var.protocol}"
   }
 
   lifecycle {
@@ -159,9 +161,9 @@ resource "aws_security_group" "ecs_service" {
   }
 
   ingress {
-    from_port   = "${var.port}"
-    to_port     = "${var.port}"
-    protocol    = "tcp"
+    from_port       = "${var.port}"
+    to_port         = "${var.port}"
+    protocol        = "tcp"
     security_groups = ["${var.cluster_alb_security_group_id}"]
   }
 
@@ -195,5 +197,5 @@ resource "aws_ecs_service" "service" {
     ignore_changes = ["desired_count"]
   }
 
-  depends_on = ["aws_alb_target_group.service", "aws_alb_listener_rule.service_http", "aws_alb_listener_rule.service_https"]
+  depends_on = ["aws_alb_target_group.service", "aws_alb_listener_rule.service_http", "aws_alb_listener_rule.service_https", "aws_ecs_task_definition.service"]
 }
