@@ -74,7 +74,8 @@ resource "aws_alb_target_group" "service" {
   target_type = "ip"
 
   health_check {
-    path = "${var.health_check_url}"
+    path     = "${var.health_check_url}"
+    protocol = "${var.protocol}"
   }
 
   lifecycle {
@@ -195,5 +196,5 @@ resource "aws_ecs_service" "service" {
     ignore_changes = ["desired_count"]
   }
 
-  depends_on = ["aws_alb_target_group.service", "aws_alb_listener_rule.service_http", "aws_alb_listener_rule.service_https"]
+  depends_on = ["aws_alb_target_group.service", "aws_alb_listener_rule.service_http", "aws_alb_listener_rule.service_https", "aws_ecs_task_definition.service"]
 }
