@@ -24,6 +24,7 @@ IAM task role
 ======*/
 resource "aws_iam_role" "ecs_task_role" {
   name = "${var.service_name}-ecs-task-role"
+
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -160,9 +161,9 @@ resource "aws_security_group" "ecs_service" {
   }
 
   ingress {
-    from_port   = "${var.port}"
-    to_port     = "${var.port}"
-    protocol    = "tcp"
+    from_port       = "${var.port}"
+    to_port         = "${var.port}"
+    protocol        = "tcp"
     security_groups = ["${var.cluster_alb_security_group_id}"]
   }
 

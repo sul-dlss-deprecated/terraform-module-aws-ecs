@@ -13,7 +13,7 @@ resource "aws_cloudwatch_log_group" "cluster" {
 
   tags {
     Environment = "${var.environment}"
-    Cluster = "${var.cluster_name}"
+    Cluster     = "${var.cluster_name}"
   }
 }
 
@@ -43,7 +43,7 @@ resource "aws_security_group" "cluster_alb_sg" {
 }
 
 resource "aws_security_group_rule" "ingress" {
-  count       = "${length(var.open_ports)}"
+  count = "${length(var.open_ports)}"
 
   type        = "ingress"
   protocol    = "tcp"
@@ -70,11 +70,11 @@ resource "random_id" "target_group" {
 
 /* default target group and listeners */
 resource "aws_alb_target_group" "cluster_alb_default_tg" {
-  name                  = "${var.cluster_name}-alb-${random_id.target_group.hex}"
-  port                  = 80
-  protocol              = "HTTP"
-  vpc_id                = "${var.vpc_id}"
-  deregistration_delay  = 30
+  name                 = "${var.cluster_name}-alb-${random_id.target_group.hex}"
+  port                 = 80
+  protocol             = "HTTP"
+  vpc_id               = "${var.vpc_id}"
+  deregistration_delay = 30
 
   lifecycle {
     create_before_destroy = true
@@ -109,6 +109,7 @@ locals {
   default_certificate_name = "${var.cluster_name}-lb.${var.hosted_zone_name}"
   certificate_name         = "${var.certificate_name != "" ? var.certificate_name : local.default_certificate_name}"
 }
+
 /* cert for https listener */
 data "aws_route53_zone" "selected" {
   name         = "${var.hosted_zone_name}."

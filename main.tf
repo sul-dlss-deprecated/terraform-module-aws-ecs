@@ -3,6 +3,7 @@ ECS execution role
 ======*/
 resource "aws_iam_role" "ecs_execution_role" {
   name = "${var.environment}-ecs-task-execution-role"
+
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -30,7 +31,7 @@ resource "aws_iam_user" "deployer" {
 }
 
 resource "aws_iam_access_key" "deployer" {
-  user    = "${aws_iam_user.deployer.name}"
+  user = "${aws_iam_user.deployer.name}"
 }
 
 resource "aws_iam_user_policy" "deployer" {

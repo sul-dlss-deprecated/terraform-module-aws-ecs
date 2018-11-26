@@ -16,7 +16,7 @@ variable "service_host" {
 
 variable "service_fullhost" {
   description = "Hostname for the ALB (ie: 'consul.stanford.edu')"
-  default = ""
+  default     = ""
 }
 
 #######################################################################
@@ -112,6 +112,6 @@ variable "cloudwatch_alerts_arn" {
 }
 
 variable "service_type" {
-    default = "FARGATE"
-    description = "TYPE and COMPATIBILITY for container service, default [FARGATE]."
+  default     = "FARGATE"
+  description = "TYPE and COMPATIBILITY for container service, default [FARGATE]."
 }

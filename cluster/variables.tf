@@ -25,10 +25,10 @@ variable "hosted_zone_name" {
 
 variable "certificate_name" {
   description = "Hostname for the certificate to use for validation"
-  default = ""
+  default     = ""
 }
 
 variable "alb_cidr" {
-  type = "list"
+  type    = "list"
   default = ["0.0.0.0/0"]
 }
