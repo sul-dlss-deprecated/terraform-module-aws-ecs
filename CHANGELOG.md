@@ -1,3 +1,12 @@
+# v11
+
+* service: set the health check protocol to the same protocol as the
+  service.
+
+# v10
+
+* service: Set default alb redirect rule.
+
 # v9
 
 * Add a data version of the main ecs module, to allow sub-modules to include
