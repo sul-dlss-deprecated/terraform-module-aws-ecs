@@ -1,3 +1,8 @@
+# v12
+
+* [[Pending]]
+* service: Rename to fargate in prep for creating a separate EC2 ECS directory.
+
 # v11
 
 * service: set the health check protocol to the same protocol as the
