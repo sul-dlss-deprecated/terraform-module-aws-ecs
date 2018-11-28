@@ -1,12 +1,11 @@
-/*====
-Route53 record, cerfitifcates, and http/https directs
-======*/
-
+# Some logic to generate the service host using the name and cluster zone if
+# no host is given.
 locals {
   default_service_host = "${var.service_name}.${var.cluster_zone_name}"
   service_host         = "${var.service_fullhost != "" ? var.service_fullhost : local.default_service_host}"
 }
 
+# Create a route53 record for the service to use.
 resource "aws_route53_record" "service" {
   zone_id = "${var.cluster_zone_id}"
   name    = "${local.service_host}"
@@ -19,13 +18,13 @@ resource "aws_route53_record" "service" {
   }
 }
 
-/*====
-Service ALB target group & listener rule
-======*/
+# Create some randomness to append to the target group name for uniqueness.
 resource "random_id" "target_group" {
   byte_length = 2
 }
 
+# Create the target group for this service, which will route requests for the
+# application to the containers.
 resource "aws_alb_target_group" "service" {
   name        = "${var.service_name}-alb-tg-${random_id.target_group.hex}"
   port        = "${var.port}"
@@ -43,6 +42,7 @@ resource "aws_alb_target_group" "service" {
   }
 }
 
+# Redirect http to https by default.
 resource "aws_alb_listener_rule" "service_http" {
   listener_arn = "${var.cluster_alb_http_listener_arn}"
 
@@ -64,6 +64,8 @@ resource "aws_alb_listener_rule" "service_http" {
   depends_on = ["aws_alb_target_group.service"]
 }
 
+# Listen for https connections and forward them to the target group for load
+# balancing.
 resource "aws_alb_listener_rule" "service_https" {
   listener_arn = "${var.cluster_alb_https_listener_arn}"
 
@@ -80,7 +82,8 @@ resource "aws_alb_listener_rule" "service_https" {
   depends_on = ["aws_alb_target_group.service"]
 }
 
-/* cert for https listener */
+# Create a local certificate for https.  The machine likely has its own cert,
+# but this covers any connections from the world to the load balancer.
 resource "aws_alb_listener_certificate" "service" {
   listener_arn    = "${var.cluster_alb_https_listener_arn}"
   certificate_arn = "${aws_acm_certificate_validation.cert.certificate_arn}"
@@ -91,6 +94,8 @@ resource "aws_acm_certificate" "cert" {
   validation_method = "DNS"
 }
 
+# Create a validation record for that certificate, so that AWS can verify we do
+# own the hostname.
 resource "aws_route53_record" "cert_validation" {
   name    = "${aws_acm_certificate.cert.domain_validation_options.0.resource_record_name}"
   type    = "${aws_acm_certificate.cert.domain_validation_options.0.resource_record_type}"
