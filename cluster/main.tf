@@ -64,13 +64,9 @@ resource "aws_security_group_rule" "egress" {
   security_group_id = "${aws_security_group.cluster_alb_sg.id}"
 }
 
-resource "random_id" "target_group" {
-  byte_length = 2
-}
-
 /* default target group and listeners */
 resource "aws_alb_target_group" "cluster_alb_default_tg" {
-  name                 = "${var.cluster_name}-alb-${random_id.target_group.hex}"
+  name                 = "${var.cluster_name}-alb"
   port                 = 80
   protocol             = "HTTP"
   vpc_id               = "${var.vpc_id}"
