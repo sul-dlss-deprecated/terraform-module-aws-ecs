@@ -10,10 +10,6 @@ variable "environment" {
   description = "Environment name used in resource names along with service_name"
 }
 
-variable "service_host" {
-  description = "Shorthost for the ALB hostname (ie: 'consul' for consul.sul.stanford.edu)"
-}
-
 variable "service_fullhost" {
   description = "Hostname for the ALB (ie: 'consul.stanford.edu')"
   default     = ""
@@ -55,20 +51,17 @@ variable "container_definition" {
   description = "JSON container definition for the task(s) to run"
 }
 
+variable "service_type" {
+  default     = "FARGATE"
+  description = "TYPE and COMPATIBILITY for container service, default [FARGATE]."
+}
+
 #######################################################################
 # Cluster and VPC settings
 #######################################################################
 
-variable "cluster_id" {
-  description = "Cluster ID to create in"
-}
-
 variable "cluster_name" {
   description = "Cluster name to create in"
-}
-
-variable "cluster_zone_id" {
-  description = "AWS Route53 zone_id for the cluster"
 }
 
 variable "cluster_zone_name" {
@@ -79,20 +72,8 @@ variable "cluster_alb_dns_name" {
   description = "Hostname for the ALB connection"
 }
 
-variable "cluster_alb_zone_id" {
-  description = "AWS Route53 zone_id for the ALB (should actually be same as cluster_zone_id)"
-}
-
-variable "cluster_alb_http_listener_arn" {
-  description = "ALB listener for port 80"
-}
-
-variable "cluster_alb_https_listener_arn" {
-  description = "ALB listener for port 443"
-}
-
-variable "cluster_alb_security_group_id" {
-  description = "Security group into the ALB"
+variable "cloudwatch_alerts_arn" {
+  description = "SNS topic for cloudwatch alerts"
 }
 
 variable "vpc_id" {
@@ -105,13 +86,4 @@ variable "private_subnets" {
 
 variable "execution_role_arn" {
   description = "Execution role assigned to the ECS task"
-}
-
-variable "cloudwatch_alerts_arn" {
-  description = "SNS topic to send cloudwatch alerts to"
-}
-
-variable "service_type" {
-  default     = "FARGATE"
-  description = "TYPE and COMPATIBILITY for container service, default [FARGATE]."
 }

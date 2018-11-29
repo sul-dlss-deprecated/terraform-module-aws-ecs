@@ -7,13 +7,13 @@ locals {
 
 # Create a route53 record for the service to use.
 resource "aws_route53_record" "service" {
-  zone_id = "${var.cluster_zone_id}"
+  zone_id = "${data.aws_route53_zone.selected.id}"
   name    = "${local.service_host}"
   type    = "A"
 
   alias {
     name                   = "${var.cluster_alb_dns_name}"
-    zone_id                = "${var.cluster_alb_zone_id}"
+    zone_id                = "${data.aws_alb.cluster_alb.zone_id}"
     evaluate_target_health = true
   }
 }
@@ -44,7 +44,7 @@ resource "aws_alb_target_group" "service" {
 
 # Redirect http to https by default.
 resource "aws_alb_listener_rule" "service_http" {
-  listener_arn = "${var.cluster_alb_http_listener_arn}"
+  listener_arn = "${data.aws_alb_listener.cluster_alb_http_listener.arn}"
 
   action {
     type = "redirect"
@@ -67,7 +67,7 @@ resource "aws_alb_listener_rule" "service_http" {
 # Listen for https connections and forward them to the target group for load
 # balancing.
 resource "aws_alb_listener_rule" "service_https" {
-  listener_arn = "${var.cluster_alb_https_listener_arn}"
+  listener_arn = "${data.aws_alb_listener.cluster_alb_https_listener.arn}"
 
   action {
     type             = "forward"
@@ -85,7 +85,7 @@ resource "aws_alb_listener_rule" "service_https" {
 # Create a local certificate for https.  The machine likely has its own cert,
 # but this covers any connections from the world to the load balancer.
 resource "aws_alb_listener_certificate" "service" {
-  listener_arn    = "${var.cluster_alb_https_listener_arn}"
+  listener_arn    = "${data.aws_alb_listener.cluster_alb_https_listener.arn}"
   certificate_arn = "${aws_acm_certificate_validation.cert.certificate_arn}"
 }
 
@@ -99,7 +99,7 @@ resource "aws_acm_certificate" "cert" {
 resource "aws_route53_record" "cert_validation" {
   name    = "${aws_acm_certificate.cert.domain_validation_options.0.resource_record_name}"
   type    = "${aws_acm_certificate.cert.domain_validation_options.0.resource_record_type}"
-  zone_id = "${var.cluster_zone_id}"
+  zone_id = "${data.aws_route53_zone.selected.id}"
   records = ["${aws_acm_certificate.cert.domain_validation_options.0.resource_record_value}"]
   ttl     = 300
 }

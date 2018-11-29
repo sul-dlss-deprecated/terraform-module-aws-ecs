@@ -58,7 +58,7 @@ resource "aws_security_group" "ecs_service" {
     from_port       = "${var.port}"
     to_port         = "${var.port}"
     protocol        = "tcp"
-    security_groups = ["${var.cluster_alb_security_group_id}"]
+    security_groups = ["${data.aws_security_group.cluster_alb_sg.id}"]
   }
 
   tags {
@@ -72,7 +72,7 @@ resource "aws_ecs_service" "service" {
   task_definition = "${aws_ecs_task_definition.service.arn}"
   desired_count   = "${var.min_capacity}"
   launch_type     = "${var.service_type}"
-  cluster         = "${var.cluster_id}"
+  cluster         = "${data.aws_ecs_cluster.cluster.id}"
 
   network_configuration {
     security_groups = ["${aws_security_group.ecs_service.id}"]

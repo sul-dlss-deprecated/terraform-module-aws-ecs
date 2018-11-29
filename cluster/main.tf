@@ -66,7 +66,7 @@ resource "aws_security_group_rule" "egress" {
 
 /* default target group and listeners */
 resource "aws_alb_target_group" "cluster_alb_default_tg" {
-  name                 = "${var.cluster_name}-alb"
+  name                 = "cluster-${var.cluster_name}-alb"
   port                 = 80
   protocol             = "HTTP"
   vpc_id               = "${var.vpc_id}"
