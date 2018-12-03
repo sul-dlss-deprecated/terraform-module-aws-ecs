@@ -20,11 +20,6 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_high_alert" {
   ok_actions    = ["${var.cloudwatch_alerts_arn}"]
 }
 
-# Get the data for the given HTTP and HTTPS listeners.
-#data "aws_lb" "service" {
-#  name = "${var.cluster_name}-alb"
-#}
-
 resource "aws_cloudwatch_metric_alarm" "elb_response" {
   alarm_name          = "${var.service_name}-${var.environment}-elb-response-slow"
   comparison_operator = "LessThanOrEqualToThreshold"
@@ -37,7 +32,7 @@ resource "aws_cloudwatch_metric_alarm" "elb_response" {
   treat_missing_data  = "notBreaching"
 
   dimensions {
-    LoadBalancer = "${var.cluster_alb_dns_name}"
+    LoadBalancer = "${data.aws_alb.cluster_alb.arn_suffix}"
     TargetGroup  = "${aws_alb_target_group.service.arn_suffix}"
   }
 
@@ -56,7 +51,7 @@ resource "aws_cloudwatch_metric_alarm" "elb_health_hosts" {
   threshold           = "1"
 
   dimensions {
-    LoadBalancer = "${var.cluster_alb_dns_name}"
+    LoadBalancer = "${data.aws_alb.cluster_alb.arn_suffix}"
     TargetGroup  = "${aws_alb_target_group.service.arn_suffix}"
   }
 

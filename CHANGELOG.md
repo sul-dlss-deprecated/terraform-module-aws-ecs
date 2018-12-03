@@ -1,3 +1,17 @@
+# v12
+
+* service: Rename to fargate in prep for creating a separate EC2 ECS directory.
+* service: Update to look up most values via data blocks rather than passing
+  along so many values.
+    Removed:
+      service_host (already replaced by service_fullhost)
+      cluster_id
+      cluster_zone_id
+      cluster_alb_zone_id
+      cluster_alb_http_listener_arn
+      cluster_alb_https_listener_arn
+      cluster_alb_security_group_id
+
 # v11
 
 * service: set the health check protocol to the same protocol as the
