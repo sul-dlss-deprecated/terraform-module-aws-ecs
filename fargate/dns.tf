@@ -25,7 +25,7 @@ resource "aws_alb_target_group" "service" {
   port        = "${var.port}"
   protocol    = "${var.protocol}"
   vpc_id      = "${var.vpc_id}"
-  target_type = "ip"
+  target_type = "instance"
 
   health_check {
     path     = "${var.health_check_url}"
