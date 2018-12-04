@@ -91,5 +91,11 @@ resource "aws_ecs_service" "service" {
     ignore_changes = ["desired_count"]
   }
 
-  depends_on = ["aws_alb_target_group.service", "aws_alb_listener_rule.service_http", "aws_alb_listener_rule.service_https", "aws_ecs_task_definition.service"]
+  depends_on = ["aws_ecs_task_definition.service"]
+}
+
+resource "aws_lb_target_group_attachment" "service" {
+  target_group_arn = "${aws_alb_target_group.service.arn}"
+  target_id        = "${aws_ecs_service.service.id}"
+  port             = "${var.port}"
 }
