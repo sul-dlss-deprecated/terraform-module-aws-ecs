@@ -18,15 +18,10 @@ resource "aws_route53_record" "service" {
   }
 }
 
-# Create some randomness to append to the target group name for uniqueness.
-resource "random_id" "target_group" {
-  byte_length = 2
-}
-
 # Create the target group for this service, which will route requests for the
 # application to the containers.
 resource "aws_alb_target_group" "service" {
-  name        = "${var.service_name}-alb-tg-${random_id.target_group.hex}"
+  name        = "ecs-${var.service_name}-alb"
   port        = "${var.port}"
   protocol    = "${var.protocol}"
   vpc_id      = "${var.vpc_id}"

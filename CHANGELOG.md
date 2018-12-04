@@ -1,3 +1,8 @@
+# v13
+
+* fargate: Change the name of the target group to remove the random string as
+  unneeded, and to make it easier to tell cluster and ECS target groups apart.
+
 # v12
 
 * service: Rename to fargate in prep for creating a separate EC2 ECS directory.
