@@ -47,24 +47,28 @@ resource "aws_security_group" "ecs_service" {
   name        = "${var.service_name}-ecs-service-sg"
   description = "Allow egress from container"
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port       = "${var.port}"
-    to_port         = "${var.port}"
-    protocol        = "tcp"
-    security_groups = ["${data.aws_security_group.cluster_alb_sg.id}"]
-  }
-
   tags {
     Name        = "${var.service_name}-ecs-service-sg"
     Environment = "${var.environment}"
   }
+}
+
+resource "aws_security_group_rule" "service_egress" {
+  type        = "egress"
+  from_port   = 0
+  to_port     = 0
+  protocol    = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = "${aws_security_group.ecs_service.id}"
+}
+
+resource "aws_security_group_rule" "service_ingress" {
+  type                     = "ingress"
+  from_port                = "${var.port}"
+  to_port                  = "${var.port}"
+  protocol                 = "tcp"
+  security_group_id        = "${aws_security_group.ecs_service.id}"
+  source_security_group_id = "${data.aws_security_group.cluster_alb_sg.id}"
 }
 
 resource "aws_ecs_service" "service" {

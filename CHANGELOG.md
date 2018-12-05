@@ -1,3 +1,11 @@
+# v14
+
+* fargate: Separate out security group rules from security group, to allow
+  editing them outside of the module.  While this won't change the end result
+  of anything calling the module, you might need to manually delete the
+  existing versions of the security group rules from the security group via the
+  AWS console or CLI.
+
 # v13
 
 * fargate: Change the name of the target group to remove the random string as
