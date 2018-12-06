@@ -3,6 +3,9 @@
 locals {
   default_service_host = "${var.service_name}.${var.cluster_zone_name}"
   service_host         = "${var.service_fullhost != "" ? var.service_fullhost : local.default_service_host}"
+
+  http_listener        = "${var.http_listener != "" ? var.http_listener : data.aws_alb_listener.cluster_alb_http_listener.arn}"
+  https_listener       = "${var.https_listener != "" ? var.https_listener : data.aws_alb_listener.cluster_alb_https_listener.arn}"
 }
 
 # Create a route53 record for the service to use.
@@ -39,7 +42,7 @@ resource "aws_alb_target_group" "service" {
 
 # Redirect http to https by default.
 resource "aws_alb_listener_rule" "service_http" {
-  listener_arn = "${data.aws_alb_listener.cluster_alb_http_listener.arn}"
+  listener_arn    = "${local.http_listener}"
 
   action {
     type = "redirect"
@@ -62,7 +65,7 @@ resource "aws_alb_listener_rule" "service_http" {
 # Listen for https connections and forward them to the target group for load
 # balancing.
 resource "aws_alb_listener_rule" "service_https" {
-  listener_arn = "${data.aws_alb_listener.cluster_alb_https_listener.arn}"
+  listener_arn = "${local.https_listener}"
 
   action {
     type             = "forward"
@@ -80,7 +83,7 @@ resource "aws_alb_listener_rule" "service_https" {
 # Create a local certificate for https.  The machine likely has its own cert,
 # but this covers any connections from the world to the load balancer.
 resource "aws_alb_listener_certificate" "service" {
-  listener_arn    = "${data.aws_alb_listener.cluster_alb_https_listener.arn}"
+  listener_arn    = "${local.https_listener}"
   certificate_arn = "${aws_acm_certificate_validation.cert.certificate_arn}"
 }
 

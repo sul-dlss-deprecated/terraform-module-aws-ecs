@@ -56,6 +56,16 @@ variable "service_type" {
   description = "TYPE and COMPATIBILITY for container service, default [FARGATE]."
 }
 
+variable "http_listener" {
+  default     = ""
+  description = "HTTP listener to use for the target groups, default uses the cluster listener"
+}
+
+variable "https_listener" {
+  default     = ""
+  description = "HTTPS listener to use for the target groups, default uses the cluster listener"
+}
+
 #######################################################################
 # Cluster and VPC settings
 #######################################################################
@@ -86,4 +96,8 @@ variable "private_subnets" {
 
 variable "execution_role_arn" {
   description = "Execution role assigned to the ECS task"
+}
+
+variable "alb_sg" {
+  description = "ALB security group to allow access to the cluster for.  Defaults to cluster ALB SG if none given."
 }
