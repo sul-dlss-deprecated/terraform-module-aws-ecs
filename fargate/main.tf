@@ -42,6 +42,10 @@ resource "aws_ecs_task_definition" "service" {
 /*====
 Security Group
 ======*/
+locals {
+  alb_sg = "${var.alb_sg != "" ? var.alb_sg : data.aws_security_group.cluster_alb_sg.id}"
+}
+
 resource "aws_security_group" "ecs_service" {
   vpc_id      = "${var.vpc_id}"
   name        = "${var.service_name}-ecs-service-sg"
@@ -68,7 +72,7 @@ resource "aws_security_group_rule" "service_ingress" {
   to_port                  = "${var.port}"
   protocol                 = "tcp"
   security_group_id        = "${aws_security_group.ecs_service.id}"
-  source_security_group_id = "${data.aws_security_group.cluster_alb_sg.id}"
+  source_security_group_id = "${local.alb_sg}"
 }
 
 resource "aws_ecs_service" "service" {

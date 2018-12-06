@@ -1,3 +1,10 @@
+# v15
+
+* fargate: Add override for http and https listeners, for the case of
+  shibboleth where we want to use an ALB other than the cluster default.  This
+  is just set by overriding default http_listener and https_listener in
+  variables, and so won't change anything on upgrade.
+
 # v14
 
 * fargate: Separate out security group rules from security group, to allow
