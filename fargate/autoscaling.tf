@@ -8,7 +8,7 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
   metric_name         = "CPUUtilization"
   namespace           = "AWS/ECS"
   period              = "60"
-  statistic           = "Maximum"
+  statistic           = "Average"
   threshold           = "75"
 
   dimensions {
@@ -17,7 +17,24 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
   }
 
   alarm_actions = ["${aws_appautoscaling_policy.service_up.arn}"]
-  ok_actions    = ["${aws_appautoscaling_policy.service_down.arn}"]
+}
+
+resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
+  alarm_name          = "${var.service_name}-${var.environment}-cpu-high"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/ECS"
+  period              = "60"
+  statistic           = "Average"
+  threshold           = "25"
+
+  dimensions {
+    ClusterName = "${var.cluster_name}"
+    ServiceName = "${aws_ecs_service.service.name}"
+  }
+
+  alarm_actions = ["${aws_appautoscaling_policy.service_down.arn}"]
 }
 
 data "aws_iam_role" "ecs_autoscale_role" {
