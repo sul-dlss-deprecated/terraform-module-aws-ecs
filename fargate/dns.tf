@@ -38,6 +38,11 @@ resource "aws_alb_target_group" "service" {
   lifecycle {
     create_before_destroy = true
   }
+
+  tags {
+    terraform = "true"
+    project   = "${var.project}"
+  }
 }
 
 # Redirect http to https by default.
@@ -90,6 +95,11 @@ resource "aws_alb_listener_certificate" "service" {
 resource "aws_acm_certificate" "cert" {
   domain_name       = "${aws_route53_record.service.fqdn}"
   validation_method = "DNS"
+
+  tags {
+    terraform = "true"
+    project   = "${var.project}"
+  }
 }
 
 # Create a validation record for that certificate, so that AWS can verify we do

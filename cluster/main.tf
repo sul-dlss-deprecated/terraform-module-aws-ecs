@@ -3,6 +3,11 @@ ECS cluster
 ======*/
 resource "aws_ecs_cluster" "cluster" {
   name = "${var.cluster_name}"
+
+  tags {
+    terraform = "true"
+    project   = "${var.project}"
+  }
 }
 
 /*====
@@ -12,8 +17,9 @@ resource "aws_cloudwatch_log_group" "cluster" {
   name = "${var.cluster_name}"
 
   tags {
-    Environment = "${var.environment}"
-    Cluster     = "${var.cluster_name}"
+    Cluster   = "${var.cluster_name}"
+    terraform = "true"
+    project   = "${var.project}"
   }
 }
 
@@ -26,8 +32,9 @@ resource "aws_alb" "cluster_alb" {
   security_groups = ["${aws_security_group.cluster_alb_sg.id}"]
 
   tags {
-    Name        = "${var.cluster_name}-alb"
-    Environment = "${var.environment}"
+    Name      = "${var.cluster_name}-alb"
+    terraform = "true"
+    project   = "${var.project}"
   }
 }
 
@@ -38,7 +45,9 @@ resource "aws_security_group" "cluster_alb_sg" {
   vpc_id      = "${var.vpc_id}"
 
   tags {
-    Name = "${var.cluster_name}-alb-sg"
+    Name      = "${var.cluster_name}-alb-sg"
+    terraform = "true"
+    project   = "${var.project}"
   }
 }
 
@@ -74,6 +83,11 @@ resource "aws_alb_target_group" "cluster_alb_default_tg" {
 
   lifecycle {
     create_before_destroy = true
+  }
+
+  tags {
+    terraform = "true"
+    project   = "${var.project}"
   }
 }
 

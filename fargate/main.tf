@@ -19,6 +19,11 @@ resource "aws_iam_role" "ecs_task_role" {
   ]
 }
 EOF
+
+  tags {
+    terraform = "true"
+    project   = "${var.project}"
+  }
 }
 
 /*====
@@ -37,6 +42,11 @@ resource "aws_ecs_task_definition" "service" {
   lifecycle {
     create_before_destroy = true
   }
+
+  tags {
+    terraform = "true"
+    project   = "${var.project}"
+  }
 }
 
 /*====
@@ -52,8 +62,9 @@ resource "aws_security_group" "ecs_service" {
   description = "Allow egress from container"
 
   tags {
-    Name        = "${var.service_name}-ecs-service-sg"
-    Environment = "${var.environment}"
+    Name      = "${var.service_name}-ecs-service-sg"
+    terraform = "true"
+    project   = "${var.project}"
   }
 }
 
@@ -100,4 +111,9 @@ resource "aws_ecs_service" "service" {
   }
 
   depends_on = ["aws_alb_target_group.service", "aws_alb_listener_rule.service_http", "aws_alb_listener_rule.service_https", "aws_ecs_task_definition.service"]
+
+  tags {
+    terraform = "true"
+    project   = "${var.project}"
+  }
 }

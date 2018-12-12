@@ -15,6 +15,10 @@ variable "service_fullhost" {
   default     = ""
 }
 
+variable "project" {
+  description = "Project to add to Terraform tags"
+}
+
 #######################################################################
 # Service settings
 #######################################################################

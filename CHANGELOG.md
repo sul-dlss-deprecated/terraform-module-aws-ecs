@@ -1,3 +1,9 @@
+# v16
+
+* Add `project` tag to the main variable sets, to set Terraform tags.
+* cluster: Add `project` tag to the variables and set Terraform tags.
+* fargate: Add `project` tag to the variables and set Terraform tags.
+
 # v15
 
 * fargate: Add override for http and https listeners, for the case of
