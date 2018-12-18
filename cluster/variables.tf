@@ -2,6 +2,10 @@ variable "cluster_name" {
   description = "Cluster name to be used in resource names"
 }
 
+variable "project" {
+  description = "Project to add to Terraform tags"
+}
+
 variable "environment" {
   description = "Environment for the resources, used in naming and tags"
 }
