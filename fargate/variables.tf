@@ -104,4 +104,5 @@ variable "execution_role_arn" {
 
 variable "alb_sg" {
   description = "ALB security group to allow access to the cluster for.  Defaults to cluster ALB SG if none given."
+  default     = ""
 }
