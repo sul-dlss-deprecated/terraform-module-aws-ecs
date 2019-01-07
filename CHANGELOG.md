@@ -1,3 +1,7 @@
+# v17
+
+* Fixed errors with v16.
+
 # v16
 
 * Add `project` tag to the main variable sets, to set Terraform tags.

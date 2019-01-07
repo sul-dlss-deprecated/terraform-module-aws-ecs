@@ -112,11 +112,8 @@ resource "aws_ecs_service" "service" {
 
   depends_on = ["aws_alb_target_group.service", "aws_alb_listener_rule.service_http", "aws_alb_listener_rule.service_https", "aws_ecs_task_definition.service"]
 
-# TODO: AWS is doing a new format for ARN ids and won't let you change the tags
-# on the old format.  This was rolled out between testing and approving the PR,
-# so we can no longer change the existing service tags.  They'll push this out
-# on the 31st, at which point everything should upgrade and we can probably
-# re-enable tagging.
+#  FIXME: AWS changed the ARN format.  We've opted in but there are still
+#  problems with using the old formats, which mean we can't tag.
 #  tags {
 #    terraform = "true"
 #    project   = "${var.project}"
