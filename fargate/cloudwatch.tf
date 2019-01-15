@@ -22,7 +22,7 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_high_alert" {
 
 resource "aws_cloudwatch_metric_alarm" "elb_response" {
   alarm_name          = "${var.service_name}-${var.environment}-elb-response-slow"
-  comparison_operator = "LessThanOrEqualToThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "2"
   metric_name         = "TargetResponseTime"
   namespace           = "AWS/ApplicationELB"
@@ -33,7 +33,6 @@ resource "aws_cloudwatch_metric_alarm" "elb_response" {
 
   dimensions {
     LoadBalancer = "${data.aws_alb.cluster_alb.arn_suffix}"
-    TargetGroup  = "${aws_alb_target_group.service.arn_suffix}"
   }
 
   alarm_actions = ["${var.cloudwatch_alerts_arn}"]
