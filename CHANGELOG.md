@@ -1,3 +1,8 @@
+# v18
+
+* fargate: Fix reversed comparison_operator for slow TargetResponse.
+* fargate: Changed dimensions to remove TargetGroup to fix missing data.
+
 # v17
 
 * Fixed errors with v16.
